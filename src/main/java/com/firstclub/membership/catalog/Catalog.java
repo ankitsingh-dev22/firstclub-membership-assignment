@@ -4,6 +4,8 @@ import com.firstclub.membership.catalog.CatalogProperties.BenefitProperties;
 import com.firstclub.membership.catalog.CatalogProperties.EligibilityProperties;
 import com.firstclub.membership.catalog.CatalogProperties.PlanProperties;
 import com.firstclub.membership.catalog.CatalogProperties.TierProperties;
+import com.firstclub.membership.common.ErrorCode;
+import com.firstclub.membership.common.MembershipException;
 import com.firstclub.membership.eligibility.AllOfRule;
 import com.firstclub.membership.eligibility.AnyOfRule;
 import com.firstclub.membership.eligibility.CohortRule;
@@ -43,6 +45,20 @@ public class Catalog {
                 .sorted(Comparator.comparingInt(MembershipTier::getRank))
                 .toList();
         validate();
+    }
+
+    public MembershipPlan getPlan(String code) {
+        return plans.stream()
+                .filter(plan -> plan.getCode().equals(code))
+                .findFirst()
+                .orElseThrow(() -> new MembershipException(ErrorCode.PLAN_NOT_FOUND, "Unknown plan: " + code));
+    }
+
+    public MembershipTier getTier(String code) {
+        return tiers.stream()
+                .filter(tier -> tier.getCode().equals(code))
+                .findFirst()
+                .orElseThrow(() -> new MembershipException(ErrorCode.TIER_NOT_FOUND, "Unknown tier: " + code));
     }
 
     /**
