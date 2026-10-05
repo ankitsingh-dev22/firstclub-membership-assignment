@@ -9,7 +9,7 @@ import java.time.ZoneId;
 @Configuration
 public class ClockConfig {
 
-    // Expiry is calendar based ("one month from now"), so it is calculated in the business time zone.
+    // Expiry is calendar based ("one month from now"), so it is calculated in the application time zone.
     @Bean
     public Clock clock() {
         return Clock.system(ZoneId.of("Asia/Kolkata"));
