@@ -1,3 +1,66 @@
 spring:
   application:
     name: firstclub-membership
+
+# Plans set price and duration; tiers set benefits and who qualifies.
+# Tier eligibility conditions are combined with `match` (ALL by default).
+# The lowest-ranked tier must have no conditions so every user has a tier.
+membership:
+  catalog:
+    currency: INR
+    plans:
+      - code: MONTHLY
+        name: Monthly
+        duration: P1M
+        price: 299
+      - code: QUARTERLY
+        name: Quarterly
+        duration: P3M
+        price: 799
+      - code: YEARLY
+        name: Yearly
+        duration: P1Y
+        price: 2499
+    tiers:
+      - code: SILVER
+        name: Silver
+        rank: 1
+        benefits:
+          - type: FREE_DELIVERY
+            description: Free delivery on eligible orders
+      - code: GOLD
+        name: Gold
+        rank: 2
+        eligibility:
+          match: ALL
+          min-order-count: 5
+          min-monthly-order-value: 10000
+        benefits:
+          - type: FREE_DELIVERY
+            description: Free delivery on eligible orders
+          - type: EXTRA_DISCOUNT
+            description: Extra discount on selected categories
+            value: 5
+          - type: EARLY_SALE_ACCESS
+            description: Early access to sales
+      - code: PLATINUM
+        name: Platinum
+        rank: 3
+        eligibility:
+          match: ANY
+          min-monthly-order-value: 30000
+          cohorts: [VIP]
+        benefits:
+          - type: FREE_DELIVERY
+            description: Free delivery on all orders
+          - type: FASTER_DELIVERY
+            description: Priority dispatch
+          - type: EXTRA_DISCOUNT
+            description: Extra discount on selected categories
+            value: 10
+          - type: EARLY_SALE_ACCESS
+            description: Early access to sales
+          - type: EXCLUSIVE_DEALS
+            description: Members-only deals and coupons
+          - type: PRIORITY_SUPPORT
+            description: Priority customer support
