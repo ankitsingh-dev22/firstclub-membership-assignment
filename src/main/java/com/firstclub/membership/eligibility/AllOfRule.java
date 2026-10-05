@@ -1,5 +1,6 @@
 package com.firstclub.membership.eligibility;
 
+import com.firstclub.membership.model.MemberProfile;
 import lombok.Getter;
 
 import java.util.List;

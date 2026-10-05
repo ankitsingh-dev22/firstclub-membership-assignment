@@ -1,5 +1,6 @@
 package com.firstclub.membership.eligibility;
 
+import com.firstclub.membership.model.MemberProfile;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
