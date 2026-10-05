@@ -24,13 +24,15 @@ The service listens on `http://localhost:8080`. All data is in memory and resets
 
 ```
 com.firstclub.membership
-├── eligibility   rules and the member profile they are evaluated against
-├── catalog       plans, tiers, benefits (loaded from application.yml)
-├── membership    the Membership entity, repository, service and API
-└── common        Clock, error codes, exception handler
+├── controller    REST endpoints for catalog, profile and membership
+├── service       MembershipService (subscribe, change tier, cancel, re-evaluate)
+├── repository    repository interfaces and their in-memory implementations
+├── model         Membership, plans, tiers, benefits, Money, MemberProfile
+├── dto           request and response bodies where the API shape differs from the model
+├── config        Catalog (loaded from application.yml), CatalogProperties, Clock
+├── exception     error codes, MembershipException, exception handler
+└── eligibility   EligibilityRule and its implementations
 ```
-
-Dependencies point one way: `membership → catalog → eligibility`.
 
 | Class | Responsibility |
 |---|---|
