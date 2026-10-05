@@ -8,7 +8,11 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    INVALID_REQUEST(HttpStatus.BAD_REQUEST);
+    INVALID_REQUEST(HttpStatus.BAD_REQUEST),
+
+    ACTIVE_MEMBERSHIP_EXISTS(HttpStatus.CONFLICT),
+    MEMBERSHIP_NOT_ACTIVE(HttpStatus.CONFLICT),
+    CONCURRENT_MODIFICATION(HttpStatus.CONFLICT);
 
     private final HttpStatus status;
 }
