@@ -53,7 +53,7 @@ Plans and tiers are separate on purpose: the plan decides how long and how much,
 - `ACTIVE` before `expiresAt`
 - `EXPIRED` from `expiresAt` onwards
 
-`expiresAt` is computed once at subscription as `startedAt + plan duration` in the business time zone (Asia/Kolkata), so a monthly plan started on 31 Jan expires on 28/29 Feb. No scheduler is needed to expire memberships.
+`expiresAt` is computed once at subscription as `startedAt + plan duration` using the application time zone set in `ClockConfig` (Asia/Kolkata), so a monthly plan started on 31 Jan expires on 28/29 Feb. No scheduler is needed to expire memberships.
 
 ## Catalog configuration
 
@@ -197,7 +197,7 @@ There are no retries; the service reports the conflict and lets the caller decid
 
 ## Tests
 
-37 tests, run with `./mvnw test`:
+Run with `./mvnw test`. The automated tests cover:
 
 - Unit tests for eligibility rules, catalog validation and ceiling selection, membership expiry and state transitions, and the repository's atomic insert and version checks.
 - API tests that run the full Spring context against the real `application.yml`, with a mocked `Clock` to cover expiry.
@@ -205,7 +205,7 @@ There are no retries; the service reports the conflict and lets the caller decid
 
 ## Production evolution
 
-- **Persistence.** Replace the in-memory repositories with a relational database (e.g. Postgres) behind the same interfaces. The service and controllers do not change.
+- **Persistence.** Replace the in-memory repositories with a relational database (e.g. Postgres) behind the same interfaces, without changing the core service flow or API contracts.
 - **Optimistic locking.** Map `Membership.version` to JPA `@Version`, so updates become `UPDATE ... WHERE id = ? AND version = ?` and a stale write fails the same way it does now.
 - **One active membership per user.** Expiry depends on the current time, so it cannot be a static index predicate. Instead, keep a `current_membership` row per user (`user_id` primary key, pointing to the membership). Subscribing runs in one transaction: lock or version-check that row, confirm the referenced membership is no longer active, insert the new membership and repoint the row. The primary key makes concurrent first-time subscribes collide in the database.
 - **Membership history.** Keep every membership and tier change as rows instead of only the latest one, for support and auditing.
